@@ -1,0 +1,21 @@
+*{
+    font-family: 'Open Sans', sans-serif !important ;
+    
+}
+header{
+    font-weight: bold;
+}
+.fl{
+    float: left;
+}
+button, select{
+    background-color: white;
+    border: 1px solid black;
+    padding: 5px;
+    border-radius: 3px;
+    font-weight: bold;
+}
+button{
+    border: none;
+    border: 1px solid black;
+}

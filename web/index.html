@@ -1,0 +1,39 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <meta http-equiv="X-UA-Compatible" content="ie=edge">
+    <title>KUUI</title>
+    <link href="https://fonts.googleapis.com/css?family=Open+Sans&display=swap" rel="stylesheet">
+    <link rel="stylesheet" href="style.css">
+    
+</head>
+<body>
+    <header>
+        KUUI
+    </header>
+    <div id="app">
+        <div id="ns-name">
+            <div class="fl">
+                <select id="namespaces">
+                    <option>Namespace</option>
+                </select>
+            </div>
+            <div class="">
+                <select id="cmnames">
+                    <option>Name</option>
+                </select>
+            </div>
+        </div> 
+        <div id="cm-div">
+            <textarea id="cm-data" rows="12" cols="50">
+            </textarea>
+        </div>
+        <div>
+            <button id="update-button">Update ConfigMap</button>
+        </div>
+    </div>
+    <script type="text/javascript" src="index.js"></script>
+</body>
+</html>
