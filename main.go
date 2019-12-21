@@ -16,8 +16,9 @@ import (
 )
 
 const (
-	configMapBaseURL = "/configs"
-	secretBaseURL    = "/secrets"
+	configMapBaseURL  = "/configs"
+	secretBaseURL     = "/secrets"
+	namespacesBaseURL = "/namespaces"
 )
 
 var (
@@ -39,7 +40,9 @@ func main() {
 	}
 
 	router := mux.NewRouter()
+	router.HandleFunc(namespacesBaseURL, getNamespaces).Methods("GET")
 	router.HandleFunc(configMapBaseURL, listConfigMaps).Methods("GET")
+	router.HandleFunc(configMapBaseURL+"/{cmns}", getConfigMapsOfNS).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", getConfigMap).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", updateConfigMap).Methods("PUT")
 
@@ -48,6 +51,16 @@ func main() {
 		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
 			handlers.AllowedOrigins([]string{"*"}))(router))
+}
+
+func getConfigMapsOfNS(res http.ResponseWriter, req *http.Request) {
+	queryParams := mux.Vars(req)
+	namespace := queryParams["cmns"]
+	json.NewEncoder(res).Encode(util.GetConfigMapsOfNS(kubeclient, namespace))
+}
+
+func getNamespaces(res http.ResponseWriter, req *http.Request) {
+	json.NewEncoder(res).Encode(util.GetNamespaces(kubeclient))
 }
 
 func getConfigMap(res http.ResponseWriter, req *http.Request) {

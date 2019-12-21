@@ -33,3 +33,19 @@ func UpdateConfigMap(kubeclient *kubernetes.Clientset, cmns, cmName string, conf
 	}
 	return cm
 }
+
+func GetNamespaces(kubeclient *kubernetes.Clientset) []corev1.Namespace {
+	allNamespaces, err := kubeclient.CoreV1().Namespaces().List(metav1.ListOptions{})
+	if err != nil {
+		klog.Fatalf("Error while getting all the NSs %s", err.Error())
+	}
+	return allNamespaces.Items
+}
+
+func GetConfigMapsOfNS(kubeclient *kubernetes.Clientset, namespace string) []corev1.ConfigMap {
+	configMaps, err := kubeclient.CoreV1().ConfigMaps(namespace).List(metav1.ListOptions{})
+	if err != nil {
+		klog.Fatalf("Error while listing all CMs of a NS %s", err.Error())
+	}
+	return configMaps.Items
+}
