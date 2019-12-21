@@ -5,3 +5,6 @@ Later we can get it improved to support other kubernetes resources as well.
 ## RoadMap
 
 * Support for creation and deletion of the CM and Secret resource
+
+
+![Demo](docs/kuui-demo.gif)
