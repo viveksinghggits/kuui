@@ -196,7 +196,12 @@ function updateConfigMap(name, namespace, configmap, updatedData){
 function processUpdateResponse(){
     var messageSpan = document.getElementById("updatemessage-span")
     if (xmlObjUpdate.status == 200 && xmlObjUpdate.readyState == 4){
-        messageSpan.innerHTML="ConfigMap was updated successfully."
+        if (cmOrSecret == "ConfigMap"){
+            messageSpan.innerHTML="ConfigMap was updated successfully."
+        }
+        else if (cmOrSecret == "Secret"){
+            messageSpan.innerHTML="Secret was updated successfully."
+        }
     }
     else{
         messageSpan.innerHTML="There was an issue updating the conifgmap, HTTPStatus-"+xmlObjUpdate.status
