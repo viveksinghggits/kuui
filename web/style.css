@@ -21,12 +21,32 @@ header span{
     text-align: center;
     width: 50%;
 }
+
 #ns-select{
     text-align: center;
     width: 50%;
 }
+
+#configmap{
+    text-align: center;
+    width: 50% !important; 
+}
+#secret{
+    text-align: center;
+    width: 50% !important;
+}
 #cmnames{
     width: 158px;
+}
+#cm-secret{
+    width: 60%;
+    padding: 10px;
+    text-align: center;
+    margin: auto;
+}
+.selected{
+    background-color: rgb(0, 51, 153);
+    color: white;
 }
 #ns-name{
     width: 60%;
@@ -38,11 +58,10 @@ header span{
 #app{
     width: 70%;
     margin: auto;
-    margin-top: 30px;
-    text-align: center;
 }
 #update-cm{
     margin-top: 20px;
+    text-align: center;
 }
 textarea{
     resize: none;
@@ -58,22 +77,23 @@ select{
     border: 1px solid white;
 }
 button, select{
-    background-color: white;
-    
     padding: 10px;
     border-radius: 2px;
     font-weight: bold;
-    
+    cursor: pointer;
+    background-color: white;
 }
-button{
+.fancybutton{
     border: none;
-    
+}
+.submitbutton{
+    border: none;
     background-color:rgb(0, 51, 153);
     color: white;
     cursor: pointer;
     -webkit-transition: all ease 700ms;
 }
-button:hover{
+.submitbutton:hover{
     background-color: white;
     color: rgb(0, 51, 153);
 }
@@ -97,7 +117,11 @@ a{
     .selectboxes{
         width: 100% !important;
     }
+    
 }
 #alpha{
     font-size: 12px !important;
+}
+#updatemessage{
+    text-align: center;
 }

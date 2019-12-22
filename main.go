@@ -41,16 +41,42 @@ func main() {
 
 	router := mux.NewRouter()
 	router.HandleFunc(namespacesBaseURL, getNamespaces).Methods("GET")
-	router.HandleFunc(configMapBaseURL, listConfigMaps).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}", getConfigMapsOfNS).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", getConfigMap).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", updateConfigMap).Methods("PUT")
 
-	router.HandleFunc(secretBaseURL, handleSecret).Methods("GET", "POST", "PUT", "DELETE")
+	router.HandleFunc(secretBaseURL+"/{secretns}", getSecretsOfNS).Methods("GET")
+	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
+	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", updateSecret).Methods("PUT")
+
 	http.ListenAndServe(":8000",
 		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
 			handlers.AllowedOrigins([]string{"*"}))(router))
+}
+
+func updateSecret(res http.ResponseWriter, req *http.Request) {
+	pathParams := mux.Vars(req)
+	secretName := pathParams["secretname"]
+	secretNS := pathParams["secretns"]
+
+	var secret corev1.Secret
+	json.NewDecoder(req.Body).Decode(&secret)
+	json.NewEncoder(res).Encode(util.UpdateSecret(kubeclient, secretNS, secretName, secret))
+}
+
+func getSecretData(res http.ResponseWriter, req *http.Request) {
+	queryParams := mux.Vars(req)
+	secretName := queryParams["secretname"]
+	secretNS := queryParams["secretns"]
+
+	json.NewEncoder(res).Encode(util.GetSecretData(kubeclient, secretNS, secretName))
+}
+
+func getSecretsOfNS(res http.ResponseWriter, req *http.Request) {
+	queryParams := mux.Vars(req)
+	namespace := queryParams["secretns"]
+	json.NewEncoder(res).Encode(util.GetSecretsOfNS(kubeclient, namespace))
 }
 
 func getConfigMapsOfNS(res http.ResponseWriter, req *http.Request) {
@@ -91,16 +117,4 @@ func listConfigMaps(res http.ResponseWriter, req *http.Request) {
 func init() {
 	flag.StringVar(&kubeconfig, "kubeconfig", "", "Path to your kubeconfig file.")
 	flag.StringVar(&masterURL, "masterurl", "", "URL of your kube-apiserver.")
-}
-
-func handleSecret(res http.ResponseWriter, req *http.Request) {
-	if req.Method == "GET" {
-
-	} else if req.Method == "POST" {
-
-	} else if req.Method == "PUT" {
-
-	} else if req.Method == "DELETE" {
-
-	}
 }

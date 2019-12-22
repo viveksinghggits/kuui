@@ -10,12 +10,25 @@
 </head>
 <body>
     <header>
-        <h3><a href="index.html">KuUI</a><span id="alpha"> alpha</span></h3>
+        <h2><a href="index.html">KuUI</a><span id="alpha"> alpha</span></h2>
         <span>Web app to manage your K8S ConfigMap and Secrets</span>
     </header>
     <hr class="fancyhr p70">
     <div id="body">
         <div id="app">
+            <div id="cm-secret">
+                <div style="text-align: left; padding-bottom: 10px;">
+                    Please select ConfigMap or Secret:
+                </div>
+                
+                <div id="configmap" class="fl selectboxes">
+                    <button class="fancybutton resourcebutton selected" id="cmbutton">ConfigMap</button>
+                </div>
+                <div id="secret" class="fl selectboxes">
+                    <button class="fancybutton resourcebutton" id="secretbutton">Secret</button>
+                </div>
+            </div>
+            <hr class="invisiblehr" style="clear: both;">
             <div id="ns-name">
                 <div class="fl selectboxes" id="ns-select">
                     <select id="namespaces">
@@ -24,7 +37,7 @@
                 </div>
                 <div class="fl selectboxes" id="name-select">
                     <select id="cmnames">
-                        <option>Select CM Name</option>
+                        <option>Select Name</option>
                     </select>
                 </div>
             </div> 
@@ -34,7 +47,7 @@
                 </textarea>
             </div>
             <div id="update-cm">
-                <button id="update-button">Update ConfigMap</button>
+                <button id="update-button" class="submitbutton">Update ConfigMap</button>
             </div>
             <div id="updatemessage">
                 <span id="updatemessage-span">
