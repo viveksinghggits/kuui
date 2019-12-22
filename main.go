@@ -98,7 +98,6 @@ func getConfigMap(res http.ResponseWriter, req *http.Request) {
 }
 
 func updateConfigMap(res http.ResponseWriter, req *http.Request) {
-	klog.Info("updateConfigMap is called with %+v", req.Body)
 	queryParams := mux.Vars(req)
 	cmName := queryParams["cmname"]
 	cmns := queryParams["cmns"]
