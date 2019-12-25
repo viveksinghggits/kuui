@@ -137,6 +137,7 @@ function processCMResponse(){
         configmaps = JSON.parse(xmlObj1.responseText)
         
         cmData = document.getElementById("cm-data")
+        console.log("Printing before decoding")
         console.log(configmaps)
         // if we are getting secret we will have to 
         // decode the value of data and then display 
@@ -146,7 +147,8 @@ function processCMResponse(){
                 configmaps.data[key] = window.atob(configmaps.data[key])
             })
         }
-
+        console.log("Outputting the data ")
+        console.log(configmaps.data)
         cmData.value = JSON.stringify(configmaps.data)
     }
 }
@@ -159,7 +161,7 @@ document.getElementById("update-button").addEventListener("click", function (){
     allConfigMaps.forEach(function (element){
         
         if ((cmName == element.metadata.name) && (cmNamespace == element.metadata.namespace)){
-            console.log("updated data is "+ updatedData+" and element.data is "+ JSON.stringify(element.data))
+            
             if (updatedData != JSON.stringify(element.data)){
                 updateConfigMap(cmName, cmNamespace, element, updatedData)
             }
@@ -174,9 +176,11 @@ document.getElementById("update-button").addEventListener("click", function (){
 var xmlObjUpdate = createXMLHttpRequestObject()
 function updateConfigMap(name, namespace, configmap, updatedData){
     configmap.data = JSON.parse(updatedData)
-    Object.keys(configmap.data).forEach(function(key){
-        configmap.data[key] = window.btoa(configmap.data[key])
-    })
+    if (cmOrSecret == "Secret"){
+        Object.keys(configmap.data).forEach(function(key){
+            configmap.data[key] = window.btoa(configmap.data[key])
+        })
+    }
     
     if (xmlObjUpdate != null){
         if (cmOrSecret == "ConfigMap"){
@@ -206,6 +210,7 @@ function processUpdateResponse(){
     else{
         messageSpan.innerHTML="There was an issue updating the conifgmap, HTTPStatus-"+xmlObjUpdate.status
     }
+    setTimeout(function(){messageSpan.innerHTML=""}, 1500)
 }
 
 // reset will reset the select boxes once we change the 

@@ -28,7 +28,6 @@ var (
 )
 
 func main() {
-	klog.Info("Main Called")
 	flag.Parse()
 	config, err := clientcmd.BuildConfigFromFlags(masterURL, kubeconfig)
 	if err != nil {
@@ -49,6 +48,7 @@ func main() {
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", updateSecret).Methods("PUT")
 
+	// allow CORS
 	http.ListenAndServe(":8000",
 		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
@@ -109,7 +109,6 @@ func updateConfigMap(res http.ResponseWriter, req *http.Request) {
 
 }
 func listConfigMaps(res http.ResponseWriter, req *http.Request) {
-	klog.Infof("handleConfigMap was called with query %s", req.URL.Query())
 	json.NewEncoder(res).Encode(util.ListConfigMaps(kubeclient))
 }
 
