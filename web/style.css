@@ -30,10 +30,12 @@ header span{
 #configmap{
     text-align: center;
     width: 50% !important; 
+    box-sizing: border-box;
 }
 #secret{
     text-align: center;
     width: 50% !important;
+    box-sizing: border-box;
 }
 #cmnames{
     width: 158px;
@@ -103,7 +105,6 @@ button, select{
     background-color: #ffffffc9;
 }
 footer{
-    margin-top: 20px;
     padding: 20px;
     text-align: center;
 }
@@ -118,11 +119,23 @@ a{
     .selectboxes{
         width: 100% !important;
     }
-    
+    #configmap, #secret{
+        width: 100% !important;
+    }
 }
 #alpha{
     font-size: 12px !important;
 }
 #updatemessage{
     text-align: center;
+}
+#gh{
+    margin-left: 5px;
+}
+.b{
+    font-weight: bold;
+}
+#gh-image{
+    width: 25px;
+    height: 25px;
 }
