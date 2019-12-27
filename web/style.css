@@ -128,6 +128,7 @@ a{
 }
 #updatemessage{
     text-align: center;
+    font-weight: bold;
 }
 #gh{
     margin-left: 5px;
@@ -138,4 +139,20 @@ a{
 #gh-image{
     width: 25px;
     height: 25px;
+}
+.center{
+    text-align: center;
+}
+#updateurlbutton{
+    padding: 7px;
+    border-radius: 2px;
+}
+#baseurl{
+    padding: 5px;
+    font-weight: bold;
+}
+#endpointdiv{
+    display: none;
+    margin-top: 5px;
+    font-weight: bold;
 }

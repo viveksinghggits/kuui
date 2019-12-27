@@ -9,6 +9,13 @@
     <link rel="stylesheet" href="style.css">
 </head>
 <body>
+    <div class="center" id="endpointdiv">
+        <span>Please enter API endpoint</span>
+        <input type="text" id="baseurl" placeholder="http://examplehost:port">
+        <input type="button" value="Submit" class="submitbutton" id="updateurlbutton">
+        <br>
+        <span id="invalidurl"></span>
+    </div>
     <header>
         <h2><a href="index.html">KuUI</a><span id="alpha"> alpha</span></h2>
         <span>Web app to manage your K8S ConfigMap and Secrets</span>
