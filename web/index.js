@@ -111,16 +111,14 @@ var xmlObj1 = createXMLHttpRequestObject()
 document.getElementById("cmnames").addEventListener("change", function (){
     cmnamespace = document.getElementById("namespaces").value
     cmname = document.getElementById("cmnames").value
-    console.log("CMNames select was changed and the values that we have are ", cmnamespace, cmname)
+    
     if (cmname != "Select Name"){
         if (xmlObj1!=null){
-            console.log(cmOrSecret)
+            
             if (cmOrSecret=="ConfigMap"){
-                console.log("Getting configmaps")
                 xmlObj1.open("GET", CM_BASE_URL+cmnamespace+"/"+cmname, true)
             }
             else if (cmOrSecret=="Secret"){
-                console.log("Getting secrets")
                 xmlObj1.open("GET", SECRET_BASE_URL+cmnamespace+"/"+cmname, true)
             }
             xmlObj1.onreadystatechange = processCMResponse
@@ -137,8 +135,7 @@ function processCMResponse(){
         configmaps = JSON.parse(xmlObj1.responseText)
         
         cmData = document.getElementById("cm-data")
-        console.log("Printing before decoding")
-        console.log(configmaps)
+        
         // if we are getting secret we will have to 
         // decode the value of data and then display 
         // in the UI
@@ -147,9 +144,8 @@ function processCMResponse(){
                 configmaps.data[key] = window.atob(configmaps.data[key])
             })
         }
-        console.log("Outputting the data ")
-        console.log(configmaps.data)
-        cmData.value = JSON.stringify(configmaps.data)
+        
+        cmData.value = JSON.stringify(configmaps.data, null, 4)
     }
 }
 
