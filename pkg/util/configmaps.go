@@ -26,7 +26,6 @@ func GetConfigMap(kubeclient *kubernetes.Clientset, cmns, cmName string) corev1.
 }
 
 func UpdateConfigMap(kubeclient *kubernetes.Clientset, cmns, cmName string, configmap corev1.ConfigMap) *corev1.ConfigMap {
-	klog.Infof("UpdateConfigmap was called with %+v", configmap)
 	cm, err := kubeclient.CoreV1().ConfigMaps(cmns).Update(&configmap)
 	if err != nil {
 		klog.Fatalf("Error while updating the configmap: %s", err.Error())

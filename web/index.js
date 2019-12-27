@@ -1,7 +1,8 @@
-const BASE_URL="http://localhost:8000"
-const CM_BASE_URL=BASE_URL+"/configs/"
-const NS_BASE_RUL=BASE_URL+"/namespaces"
-const SECRET_BASE_URL=BASE_URL+"/secrets/"
+let BASE_URL=""
+let ls  = window.localStorage;
+let CM_BASE_URL=BASE_URL+"/configs/"
+let NS_BASE_RUL=BASE_URL+"/namespaces"
+let SECRET_BASE_URL=BASE_URL+"/secrets/"
 
 var cmOrSecret="ConfigMap"
 res = document.getElementsByClassName("resourcebutton")
@@ -33,13 +34,48 @@ function createXMLHttpRequestObject(){
 	return xmlHTTPRequest;
 }
 
+function initBaseURLBox(){
+    BASE_URL = ls.getItem("BASE_URL")
+    if (BASE_URL == null){
+        epdiv = document.getElementById("endpointdiv")
+        epdiv.style.display="block"
+    }
+    else{
+        CM_BASE_URL=BASE_URL+"/configs/"
+        NS_BASE_RUL=BASE_URL+"/namespaces"
+        SECRET_BASE_URL=BASE_URL+"/secrets/"
+    }
+}
+
+function updateBaseURL(){
+    baseurl  = document.getElementById("baseurl").value
+    let reg = new RegExp('((http[s]?):\/)\/[a-z]*[A-Z]*:\d*', 'g')
+    res = baseurl.match(reg)
+    
+    if (res == null){
+        document.getElementById("invalidurl").innerHTML="Endpoint doesnt seem to be valid."
+    }
+    else{
+        ls.setItem("BASE_URL", baseurl)
+        document.location.reload()
+    }
+    
+}
 
 var xmlObj = createXMLHttpRequestObject()
 document.addEventListener("DOMContentLoaded", function(){
+    initBaseURLBox()
+    document.getElementById("updateurlbutton").addEventListener("click", updateBaseURL)
+    
     if (xmlObj != null){
-        xmlObj.open("GET", NS_BASE_RUL, true);
-        xmlObj.onreadystatechange = processResponse;
-        xmlObj.send(null)
+        try{
+            xmlObj.open("GET", NS_BASE_RUL, true);
+            xmlObj.onreadystatechange = processResponse;
+            xmlObj.send(null)
+        }
+        catch(e){
+            displayError(e)
+        }
     }
     else{
         console.log("Error getting xmlobj")
@@ -171,7 +207,13 @@ document.getElementById("update-button").addEventListener("click", function (){
 
 var xmlObjUpdate = createXMLHttpRequestObject()
 function updateConfigMap(name, namespace, configmap, updatedData){
-    configmap.data = JSON.parse(updatedData)
+    try{
+        configmap.data = JSON.parse(updatedData)
+    }
+    catch(e){
+        displayError("Invalid input data.")
+        return
+    }
     if (cmOrSecret == "Secret"){
         Object.keys(configmap.data).forEach(function(key){
             configmap.data[key] = window.btoa(configmap.data[key])
@@ -203,9 +245,7 @@ function processUpdateResponse(){
             messageSpan.innerHTML="Secret was updated successfully."
         }
     }
-    else{
-        messageSpan.innerHTML="There was an issue updating the conifgmap, HTTPStatus-"+xmlObjUpdate.status
-    }
+    
     setTimeout(function(){messageSpan.innerHTML=""}, 1500)
 }
 
@@ -229,4 +269,10 @@ function reset(){
 function changeUpdateButton(elem){
     v = "Update "+ elem.innerHTML;
     document.getElementById("update-button").innerHTML=v;
+}
+
+function displayError(e){
+    var messageSpan = document.getElementById("updatemessage-span")    
+    messageSpan.innerHTML="Something went wrong: "+ e;
+    setTimeout(function(){messageSpan.innerHTML=""}, 1500)
 }

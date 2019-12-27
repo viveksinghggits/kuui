@@ -48,11 +48,17 @@ func main() {
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", updateSecret).Methods("PUT")
 
+	hostPort := ":8000"
 	// allow CORS
-	http.ListenAndServe(":8000",
+	klog.Infof("Endpoint is http://localhost%s", hostPort)
+	err = http.ListenAndServe(hostPort,
 		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
 			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
 			handlers.AllowedOrigins([]string{"*"}))(router))
+	if err != nil {
+		klog.Fatalf("Error %s starting the service.", err.Error())
+	}
+
 }
 
 func updateSecret(res http.ResponseWriter, req *http.Request) {
