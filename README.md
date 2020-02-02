@@ -24,9 +24,8 @@ To run the project you just have to execute the `kuui` binary by providing it th
 # or whereever you kubeconfig file is
 ```
 
-To access the UI you will just have to open the index.html file and make sure that the correct endpoint is entered
-in the index.js at [line 1](https://github.com/viveksinghggits/kuui/blob/master/web/index.js#L1).
-
+To access the UI you will just have to open the index.html file in your favourite web browser  and you will be asked to enter the endpoint of backend service for the first time. After that you can
+just acccess the web UI without any issues. 
 
 ![Demo](docs/cm-secret-final.gif)
 
@@ -34,6 +33,7 @@ in the index.js at [line 1](https://github.com/viveksinghggits/kuui/blob/master/
 ## RoadMap
 
 * Support for creation and deletion of the CM and Secret resource
+* Get the web service deployed on Kubernetes
 
 **Note**
 I recently started working on this and would love to hear your inputs/feedback, please feel free to raise an issue 
