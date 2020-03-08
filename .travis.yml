@@ -7,6 +7,6 @@ jobs:
   include:
     - stage: test
       script: 
-      - make all_unit_test
+      - make all_unit_tests
       before_script:
       - make start_kind
