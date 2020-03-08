@@ -4,6 +4,6 @@ all_unit_tests:
 start_kind:
 	GO111MODULE="on"
 	go get sigs.k8s.io/kind@v0.7.0
-	kind create cluster
-	mkdir -p /home/user/work/temp/.kube
-	kind get kubeconfig>/home/user/work/temp/.kube/config
+	kind create cluster -q
+	mkdir -p /home/.kube
+	kind get kubeconfig>/home/.kube/config
