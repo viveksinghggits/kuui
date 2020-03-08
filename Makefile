@@ -5,5 +5,4 @@ start_kind:
 	GO111MODULE="on"
 	go get sigs.k8s.io/kind@v0.7.0
 	kind create cluster -q
-	mkdir -p /home/.kube
-	kind get kubeconfig>/home/.kube/config
+	kind get kubeconfig>${HOME}/config

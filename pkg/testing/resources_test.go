@@ -44,7 +44,7 @@ type unitTestSuite struct {
 }
 
 var _ = Suite(&unitTestSuite{
-	kubeclient: loadConfig("/home/.kube/config"),
+	kubeclient: loadConfig("${HOME}/config"),
 	testNS:     testNS,
 })
 
