@@ -1,0 +1,26 @@
+configmaps:
+  - name: cmone
+    data:
+      keyone: valueone
+      keytwo: valuetwo
+  - name: cmtwo
+    data:
+      keyone: valueone
+      keytwo: valuetwo
+  - name: cmthree
+    data:
+      keyone: valueone
+      keytwo: valuetwo
+secrets:
+  - name: secretone
+    data:
+      keyone: valueone
+      keytwo: valuetwo
+  - name: secrettwo
+    data:
+      keyone: valueone
+      keytwo: valuetwo
+  - name: secretthree
+    data:
+      keyone: valueone
+      keytwo: valuetwo
