@@ -77,6 +77,19 @@ func (unit *unitTestSuite) TestGetConfigMapsOfNS(c *C) {
 	}
 }
 
+func (unit *unitTestSuite) TestGetSecretsOfNS(c *C) {
+	c.Logf("Listing all the secrets")
+	// This is going to retunt the other secrets as well, that are created
+	// by our test suite. For  ex the default secret that gets reated in every NS
+	// for now we can just decrease the number by one, but we will have
+	// figure out better bemchanism to figure out the secret names that were
+	// created by test suite
+	secrets := util.GetSecretsOfNS(unit.kubeclient, unit.testNS)
+	if len(secrets)-1 != 3 {
+		c.Fail()
+	}
+}
+
 func (unit *unitTestSuite) createTestConfigMaps(data TestData) error {
 	for _, v := range unit.configMaps {
 		cm := corev1.ConfigMap{
@@ -98,6 +111,27 @@ func (unit *unitTestSuite) createTestConfigMaps(data TestData) error {
 }
 
 func (unit *unitTestSuite) createTestSecrets(data TestData) error {
+	for _, v := range unit.secrets {
+		secretData := make(map[string][]byte)
+		for dk, dv := range v.Data {
+			secretData[dk] = []byte(dv)
+		}
+
+		secret := corev1.Secret{
+			ObjectMeta: metav1.ObjectMeta{
+				Name:      v.Name,
+				Namespace: unit.testNS,
+			},
+			TypeMeta: metav1.TypeMeta{
+				Kind: "Secret",
+			},
+			Data: secretData,
+		}
+		_, err := unit.kubeclient.CoreV1().Secrets(unit.testNS).Create(&secret)
+		if err != nil {
+			return err
+		}
+	}
 	return nil
 }
 
