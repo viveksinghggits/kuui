@@ -44,7 +44,8 @@ type unitTestSuite struct {
 }
 
 var _ = Suite(&unitTestSuite{
-	kubeclient: loadConfig("${HOME}/.kube/config"),
+	// config path will be formed in loadConfig function
+	kubeclient: loadConfig("/.kube/config"),
 	testNS:     testNS,
 })
 
@@ -129,6 +130,6 @@ func (unit *unitTestSuite) CreateTestNS() error {
 }
 
 func (unit *unitTestSuite) TearDownSuite(c *C) {
-	err := unit.kubeclient.CoreV1().Namespaces().Delete(unit.testNS, &metav1.DeleteOptions{})
-	c.Assert(err, IsNil)
+	// err := unit.kubeclient.CoreV1().Namespaces().Delete(unit.testNS, &metav1.DeleteOptions{})
+	// c.Assert(err, IsNil)
 }
