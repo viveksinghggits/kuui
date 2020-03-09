@@ -164,6 +164,6 @@ func (unit *unitTestSuite) CreateTestNS() error {
 }
 
 func (unit *unitTestSuite) TearDownSuite(c *C) {
-	// err := unit.kubeclient.CoreV1().Namespaces().Delete(unit.testNS, &metav1.DeleteOptions{})
-	// c.Assert(err, IsNil)
+	err := unit.kubeclient.CoreV1().Namespaces().Delete(unit.testNS, &metav1.DeleteOptions{})
+	c.Assert(err, IsNil)
 }

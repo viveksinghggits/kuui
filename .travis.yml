@@ -10,3 +10,5 @@ jobs:
       - make all_unit_tests
       before_script:
       - make start_kind
+      after_script:
+      - make stop_kind
