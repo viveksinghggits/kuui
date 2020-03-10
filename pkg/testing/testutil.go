@@ -25,3 +25,19 @@ func loadConfig(configPathSuffix string) *kubernetes.Clientset {
 	}
 	return kubeclient
 }
+
+func convertMapStrToByte(input map[string]string) map[string][]byte {
+	data := make(map[string][]byte)
+	for dk, dv := range input {
+		data[dk] = []byte(dv)
+	}
+	return data
+}
+
+func convertMapByteToStr(input map[string][]byte) map[string]string {
+	data := make(map[string]string)
+	for dk, dv := range input {
+		data[dk] = string(dv)
+	}
+	return data
+}
