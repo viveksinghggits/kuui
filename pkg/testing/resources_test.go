@@ -1,7 +1,9 @@
 package util
 
 import (
+	"errors"
 	"io/ioutil"
+	"reflect"
 	"testing"
 
 	"github.com/viveksinghggits/kuui/pkg/util"
@@ -71,23 +73,57 @@ func (unit *unitTestSuite) SetUpSuite(c *C) {
 
 func (unit *unitTestSuite) TestGetConfigMapsOfNS(c *C) {
 	c.Logf("Listing all the configmaps")
-	configmaps := util.GetConfigMapsOfNS(unit.kubeclient, unit.testNS)
-	if len(configmaps) != 3 {
-		c.Fail()
+	//configmaps := util.GetConfigMapsOfNS(unit.kubeclient, unit.testNS)
+	for _, v := range unit.configMaps {
+		data, err := unit.getCMDataFor(v.Name)
+		if err != nil {
+			c.Logf("Error getting data from test data from cm name %s", v.Name)
+			c.Fail()
+		}
+
+		if !reflect.DeepEqual(data, v.Data) {
+			c.Logf("Data for the configmap %s doesnt match.", v.Name)
+			c.Fail()
+		}
+
 	}
+}
+
+func (unit *unitTestSuite) getCMDataFor(cmName string) (map[string]string, error) {
+	configmaps := util.GetConfigMapsOfNS(unit.kubeclient, unit.testNS)
+
+	for _, v := range configmaps {
+		if v.Name == cmName {
+			return v.Data, nil
+		}
+	}
+	return nil, errors.New("ConfigMap not found in the test data")
 }
 
 func (unit *unitTestSuite) TestGetSecretsOfNS(c *C) {
 	c.Logf("Listing all the secrets")
-	// This is going to retunt the other secrets as well, that are created
-	// by our test suite. For  ex the default secret that gets reated in every NS
-	// for now we can just decrease the number by one, but we will have
-	// figure out better bemchanism to figure out the secret names that were
-	// created by test suite
-	secrets := util.GetSecretsOfNS(unit.kubeclient, unit.testNS)
-	if len(secrets)-1 != 3 {
-		c.Fail()
+	for _, v := range unit.secrets {
+		data, err := unit.getSecretDataFor(v.Name)
+		if err != nil {
+			c.Logf("The secret %s was not found in the test data. Err %s", v.Name, err.Error())
+			c.Fail()
+		}
+
+		if !reflect.DeepEqual(data, v.Data) {
+			c.Logf("Data didnt match for the secret %s", v.Name)
+			c.Fail()
+		}
 	}
+}
+
+func (unit *unitTestSuite) getSecretDataFor(secretName string) (map[string]string, error) {
+	secrets := util.GetSecretsOfNS(unit.kubeclient, unit.testNS)
+	for _, v := range secrets {
+		if v.Name == secretName {
+			return convertMapByteToStr(v.Data), nil
+		}
+	}
+	return nil, errors.New("Secret not found in the test data")
 }
 
 func (unit *unitTestSuite) createTestConfigMaps(data TestData) error {
@@ -112,10 +148,7 @@ func (unit *unitTestSuite) createTestConfigMaps(data TestData) error {
 
 func (unit *unitTestSuite) createTestSecrets(data TestData) error {
 	for _, v := range unit.secrets {
-		secretData := make(map[string][]byte)
-		for dk, dv := range v.Data {
-			secretData[dk] = []byte(dv)
-		}
+		secretData := convertMapStrToByte(v.Data)
 
 		secret := corev1.Secret{
 			ObjectMeta: metav1.ObjectMeta{
