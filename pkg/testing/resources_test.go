@@ -197,6 +197,18 @@ func (unit *unitTestSuite) CreateTestNS() error {
 }
 
 func (unit *unitTestSuite) TearDownSuite(c *C) {
+	// delete configmaps
+	for _, v := range unit.secrets {
+		err := util.DeleteSecret(unit.kubeclient, unit.testNS, v.Name)
+		c.Assert(err, IsNil)
+	}
+
+	// delete secrets
+	for _, v := range unit.configMaps {
+		err := util.DeleteConfigMap(unit.kubeclient, unit.testNS, v.Name)
+		c.Assert(err, IsNil)
+	}
+
 	err := unit.kubeclient.CoreV1().Namespaces().Delete(unit.testNS, &metav1.DeleteOptions{})
 	c.Assert(err, IsNil)
 }
