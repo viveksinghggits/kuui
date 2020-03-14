@@ -27,12 +27,12 @@ header span{
     width: 50%;
 }
 
-#configmap{
+#configmap, #del-configmap{
     text-align: center;
     width: 50% !important; 
     box-sizing: border-box;
 }
-#secret{
+#secret, #del-secret{
     text-align: center;
     width: 50% !important;
     box-sizing: border-box;
@@ -61,7 +61,7 @@ header span{
     width: 70%;
     margin: auto;
 }
-#update-cm{
+#update-cm, #delete-cm, #create-cm{
     margin-top: 20px;
     text-align: center;
 }
@@ -155,4 +155,31 @@ a{
     display: none;
     margin-top: 5px;
     font-weight: bold;
+}
+#nav{
+ width: 18%;
+ text-align: center;
+ box-sizing: border-box;
+ margin-top: 200px;
+}
+.action{
+    margin-top: 5px;
+}
+#resourcebody-delete, #resourcebody-create{
+    display: none;
+}
+.al-center{
+    text-align: center;
+}
+.resourcebody{
+    text-align: center;
+}
+#resourcebody-delete-confirm{
+    display: none;
+    padding: 20px;
+    background-color: #f0f0f0;
+}
+#delete-res-conf{
+    padding: 10px;
+    border: none;
 }

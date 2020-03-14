@@ -21,54 +21,108 @@
         <span>Web app to manage your K8S ConfigMap and Secrets</span>
     </header>
     <!-- <img src="images/undraw_hacker_mindset_gjwq.svg" style="position: absolute; max-width: 50%; max-height: 50%; z-index: -1;" /> -->
-    <hr class="fancyhr p70">
+    <!-- <hr class="fancyhr p70"> -->
     <div id="body">
-        <div id="app">
-            <div id="cm-secret">
-                <div style="text-align: left; padding-bottom: 10px;">
-                    Please select ConfigMap or Secret:
-                </div>
-                
-                <div id="configmap" class="fl selectboxes">
-                    <button class="fancybutton resourcebutton selected" id="cmbutton">ConfigMap</button>
-                </div>
-                <div id="secret" class="fl selectboxes">
-                    <button class="fancybutton resourcebutton" id="secretbutton">Secret</button>
-                </div>
+        <div id="nav" class="fl">
+            <div id="create" class="">
+                <button class="action fancybutton" id="create-button">Create</button>
             </div>
-            <hr class="invisiblehr" style="clear: both;">
-            <div id="ns-name">
-                <div class="fl selectboxes" id="ns-select">
-                    <select id="namespaces">
-                        <option>Select Namespace</option>
-                    </select>
-                </div>
-                <div class="fl selectboxes" id="name-select">
-                    <select id="cmnames">
-                        <option>Select Name</option>
-                    </select>
-                </div>
-            </div> 
-            <hr style="clear: both;" class="invisiblehr">
-            <div id="cm-div">
-                <textarea id="cm-data" rows="15" >
-                </textarea>
+            <div id="update" class="">
+                <button class="action fancybutton selected" id="update-button">Update</button>
             </div>
-            <div id="update-cm">
-                <button id="update-button" class="submitbutton">Update ConfigMap</button>
-            </div>
-            <div id="updatemessage">
-                <span id="updatemessage-span">
-
-                </span>
+            <div id="delete" class="">
+                <button class="action fancybutton" id="delete-button">Delete</button>
             </div>
         </div>
+        <div id="app" class="fl">
+                <div id="selectresource">
+                    <div id="cm-secret">
+                        <div style="text-align: left; padding-bottom: 10px;">
+                            Please select ConfigMap or Secret:
+                        </div>
+                        
+                        <div id="configmap" class="fl selectboxes">
+                            <button class="fancybutton resourcebutton selected" id="cmbutton">ConfigMap</button>
+                        </div>
+                        <div id="secret" class="fl selectboxes">
+                            <button class="fancybutton resourcebutton" id="secretbutton">Secret</button>
+                        </div>
+                    </div>
+                    <hr class="invisiblehr" style="clear: both;">
+                    <div id="ns-name">
+                        <div class="fl selectboxes" id="ns-select">
+                            <select id="namespaces">
+                                <option>Select Namespace</option>
+                            </select>
+                        </div>
+                        <div class="fl selectboxes" id="name-select">
+                            <select id="cmnames">
+                                <option>Select Name</option>
+                            </select>
+                        </div>
+                    </div> 
+                    <hr style="clear: both;" class="invisiblehr">
+                </div>
+                <div id="resourcebody-update" class="resourcebody">
+                    <div id="cm-div">
+                        <textarea id="cm-data" rows="15" >
+                        </textarea>
+                    </div>
+                    <div id="update-cm">
+                        <button id="update-res-button" class="submitbutton">Update ConfigMap</button>
+                    </div>
+                    <div id="updatemessage">
+                        <span id="updatemessage-span">
+
+                        </span>
+                    </div>
+                </div>
+                <!-- delete resource body -->
+                <div id="resourcebody-delete" class="resourcebody">
+                    <div id="cm-div" class="al-center">
+                        Please select the namespace and the name of the resource to delete.
+                    </div>
+                    <br>
+                    <div id="resourcebody-delete-confirm">
+                        <div>
+                            <span>
+                                Enter the name of the resource again, that you want to delete
+                            </span>
+                        </div>
+                        <br>
+                        <input type="text" id="delete-res-conf" />
+                    </div>
+                    <div id="delete-cm">
+                        <button id="delete-res-button" class="submitbutton">Delete ConfigMap</button>
+                    </div>
+                    <div id="deletemessage">
+                        <span id="deletemessage-span">
+
+                        </span>
+                    </div>
+                </div>
+                <!-- create resource -->
+                <div id="resourcebody-create" class="resourcebody">
+                    <div id="cm-div">
+                        Create resource body [WIP]
+                    </div>
+                    <div id="create-cm">
+                        <button id="create-res-button" class="submitbutton">Create Resource</button>
+                    </div>
+                    <div id="createmessage">
+                        <span id="createmessage-span">
+
+                        </span>
+                    </div>
+                </div>
+        </div>
     </div>
-    <hr class="fancyhr p70" style="margin-top: 20px;">
-    <footer>
+    <!-- <hr class="fancyhr p70" style="margin-top: 20px;"> -->
+    <footer style="clear: both;">
         <!-- <img src="images/GitHub-Mark-32px.png" id="gh-image"> -->
         <a href="https://github.com/viveksinghggits/kuui" id="gh" class="b">GitHub</a>
     </footer>
-    <script type="text/javascript" src="index.js"></script>
+    <script type="text/javascript" src="scripts/index.js"></script>
+    <script type="text/javascript" src="scripts/actions.js"></script>
 </body>
 </html>

@@ -74,7 +74,7 @@ document.addEventListener("DOMContentLoaded", function(){
             xmlObj.send(null)
         }
         catch(e){
-            displayError(e)
+            displayError(e, actionSelected)
         }
     }
     else{
@@ -147,22 +147,25 @@ var xmlObj1 = createXMLHttpRequestObject()
 document.getElementById("cmnames").addEventListener("change", function (){
     cmnamespace = document.getElementById("namespaces").value
     cmname = document.getElementById("cmnames").value
-    
-    if (cmname != "Select Name"){
-        if (xmlObj1!=null){
-            
-            if (cmOrSecret=="ConfigMap"){
-                xmlObj1.open("GET", CM_BASE_URL+cmnamespace+"/"+cmname, true)
+    if (actionSelected == "update"){
+        if (cmname != "Select Name"){
+            if (xmlObj1!=null){
+                
+                if (cmOrSecret=="ConfigMap"){
+                    xmlObj1.open("GET", CM_BASE_URL+cmnamespace+"/"+cmname, true)
+                }
+                else if (cmOrSecret=="Secret"){
+                    xmlObj1.open("GET", SECRET_BASE_URL+cmnamespace+"/"+cmname, true)
+                }
+                xmlObj1.onreadystatechange = processCMResponse
+                xmlObj1.send(null)
             }
-            else if (cmOrSecret=="Secret"){
-                xmlObj1.open("GET", SECRET_BASE_URL+cmnamespace+"/"+cmname, true)
+            else{
+                console.log("Error in xmlobj1")
             }
-            xmlObj1.onreadystatechange = processCMResponse
-            xmlObj1.send(null)
         }
-        else{
-            console.log("Error in xmlobj1")
-        }
+    } else{
+        displayDeleteResConfirmation()
     }
 })
 
@@ -185,13 +188,52 @@ function processCMResponse(){
     }
 }
 
-document.getElementById("update-button").addEventListener("click", function (){
+document.getElementById("delete-res-button").addEventListener("click", function(){
+    resName = document.getElementById("cmnames").value
+    resNS = document.getElementById("namespaces").value
+
+    // are you sure you want to delete the resource
+    confirmName = document.getElementById("delete-res-conf").value
+    if (resName== confirmName){
+        deleteResource(resName, resNS)
+    } else{
+        displayError("The name that you selected and the one you entered don't match.", actionSelected)
+    }
+})
+
+let delResXMLObj = createXMLHttpRequestObject()
+function deleteResource(resName, resNS){
+
+    if (delResXMLObj != null){
+        if (cmOrSecret == "Secret"){
+            delResXMLObj.open("DELETE", SECRET_BASE_URL+resNS+"/"+resName, true)
+        } else{
+            delResXMLObj.open("DELETE", CM_BASE_URL+resNS+"/"+resName, true)
+        }
+
+        delResXMLObj.onreadystatechange = processDelResourceResponse
+        delResXMLObj.send(null)
+    } else{
+        console.log("there was an issue creating XML object to delete the resource.")
+    }
+    
+}
+
+function processDelResourceResponse(){
+    if (delResXMLObj.status == 200 && delResXMLObj.readyState == 4){
+        console.log("Response that we got from delete resource :"+ JSON.parse(delResXMLObj.responseText))
+        displaySuccess("Resource was deleted", actionSelected)
+    } else{
+        console.log("Status of the del res response object was not OK")
+    }
+}
+
+document.getElementById("update-res-button").addEventListener("click", function (){
     updatedData = document.getElementById("cm-data").value
     cmName = document.getElementById("cmnames").value
     cmNamespace = document.getElementById("namespaces").value
-    
-    allConfigMaps.forEach(function (element){
-        
+
+    allConfigMaps.forEach(function (element){    
         if ((cmName == element.metadata.name) && (cmNamespace == element.metadata.namespace)){
             
             if (updatedData != JSON.stringify(element.data)){
@@ -211,7 +253,7 @@ function updateConfigMap(name, namespace, configmap, updatedData){
         configmap.data = JSON.parse(updatedData)
     }
     catch(e){
-        displayError("Invalid input data.")
+        displayError("Invalid input data.", actionSelected)
         return
     }
     if (cmOrSecret == "Secret"){
@@ -264,15 +306,37 @@ function reset(){
 
     // reset the namespace select
     document.getElementById("namespaces").value="Select Namespace"
+    document.getElementById("delete-res-conf").value =""
+    document.getElementById("resourcebody-delete-confirm").style.display="none"
+    
+    // select the configmaps by default
+    document.getElementById("cmbutton").classList.add("selected")
+    document.getElementById("secretbutton").classList.remove("selected")
 }
 
 function changeUpdateButton(elem){
-    v = "Update "+ elem.innerHTML;
-    document.getElementById("update-button").innerHTML=v;
+    if (actionSelected == "delete"){
+        v = "Delete "+ elem.innerHTML;
+    } else if (actionSelected == "create"){
+        v = "Create "+ elem.innerHTML;
+    } else if (actionSelected =="update"){
+        v = "Update "+ elem.innerHTML;
+    }
+    document.getElementById(actionSelected+"-res-button").innerHTML=v;
 }
 
-function displayError(e){
-    var messageSpan = document.getElementById("updatemessage-span")    
-    messageSpan.innerHTML="Something went wrong: "+ e;
+function displayError(e, action){
+    var messageSpan = document.getElementById(action+"message-span")    
+    messageSpan.innerHTML="Error : "+ e;
+    messageSpan.style.color = "red"
+    messageSpan.style.fontWeight="bold"
+    setTimeout(function(){messageSpan.innerHTML=""}, 1500)
+}
+
+function displaySuccess(message, action){
+    var messageSpan = document.getElementById(action+"message-span")    
+    messageSpan.innerHTML="Success : "+ message;
+    messageSpan.style.color = "green"
+    messageSpan.style.fontWeight="bold"
     setTimeout(function(){messageSpan.innerHTML=""}, 1500)
 }

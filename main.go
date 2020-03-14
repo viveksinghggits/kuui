@@ -43,22 +43,41 @@ func main() {
 	router.HandleFunc(configMapBaseURL+"/{cmns}", getConfigMapsOfNS).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", getConfigMap).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", updateConfigMap).Methods("PUT")
+	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", deleteConfigMap).Methods("DELETE")
 
 	router.HandleFunc(secretBaseURL+"/{secretns}", getSecretsOfNS).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", updateSecret).Methods("PUT")
+	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", deleteSecret).Methods("DELETE")
 
 	hostPort := ":8000"
 	// allow CORS
 	klog.Infof("Endpoint is http://localhost%s", hostPort)
 	err = http.ListenAndServe(hostPort,
 		handlers.CORS(handlers.AllowedHeaders([]string{"X-Requested-With", "Content-Type", "Authorization"}),
-			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "HEAD", "OPTIONS"}),
+			handlers.AllowedMethods([]string{"GET", "POST", "PUT", "DELETE", "HEAD", "OPTIONS"}),
 			handlers.AllowedOrigins([]string{"*"}))(router))
 	if err != nil {
 		klog.Fatalf("Error %s starting the service.", err.Error())
 	}
 
+}
+
+func deleteSecret(w http.ResponseWriter, r *http.Request) {
+	pathParams := mux.Vars(r)
+	secretName := pathParams["secretname"]
+	secretNS := pathParams["secretns"]
+
+	res := util.DeleteSecret(kubeclient, secretNS, secretName)
+	json.NewEncoder(w).Encode(res)
+}
+
+func deleteConfigMap(w http.ResponseWriter, r *http.Request) {
+	pathParams := mux.Vars(r)
+	cmName := pathParams["cmname"]
+	cmNS := pathParams["cmns"]
+	res := util.DeleteConfigMap(kubeclient, cmNS, cmName)
+	json.NewEncoder(w).Encode(res)
 }
 
 func updateSecret(res http.ResponseWriter, req *http.Request) {
