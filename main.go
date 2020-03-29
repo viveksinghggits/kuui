@@ -44,6 +44,7 @@ func main() {
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", getConfigMap).Methods("GET")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", updateConfigMap).Methods("PUT")
 	router.HandleFunc(configMapBaseURL+"/{cmns}/{cmname}", deleteConfigMap).Methods("DELETE")
+	router.HandleFunc(configMapBaseURL, createConfigMap).Methods("POST")
 
 	router.HandleFunc(secretBaseURL+"/{secretns}", getSecretsOfNS).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
@@ -61,6 +62,15 @@ func main() {
 		klog.Fatalf("Error %s starting the service.", err.Error())
 	}
 
+}
+
+func createConfigMap(w http.ResponseWriter, r *http.Request) {
+	var configMap corev1.ConfigMap
+	decoder := json.NewDecoder(r.Body)
+	decoder.Decode(&configMap)
+
+	res := util.CreateConfigMap(kubeclient, configMap)
+	json.NewEncoder(w).Encode(res)
 }
 
 func deleteSecret(w http.ResponseWriter, r *http.Request) {

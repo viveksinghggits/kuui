@@ -52,3 +52,8 @@ func GetConfigMapsOfNS(kubeclient *kubernetes.Clientset, namespace string) []cor
 func DeleteConfigMap(kubeclient *kubernetes.Clientset, namespace, name string) error {
 	return kubeclient.CoreV1().ConfigMaps(namespace).Delete(name, &metav1.DeleteOptions{})
 }
+
+func CreateConfigMap(kubeclient *kubernetes.Clientset, cm corev1.ConfigMap) error {
+	_, err := kubeclient.CoreV1().ConfigMaps(cm.Namespace).Create(&cm)
+	return err
+}
