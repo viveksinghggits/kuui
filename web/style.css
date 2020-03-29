@@ -93,7 +93,7 @@ button, select{
     background-color:rgb(0, 51, 153);
     color: white;
     cursor: pointer;
-    -webkit-transition: all ease 700ms;
+    transition: all ease 700ms;
 }
 .submitbutton:hover{
     background-color: white;
@@ -182,4 +182,35 @@ a{
 #delete-res-conf{
     padding: 10px;
     border: none;
+}
+#cm-content-from-file{
+    display: none;
+}
+.plus-button{
+    font-weight: bolder;
+    background-color: white;
+    border: none;
+    font-size: larger;
+}
+.key-value{
+    margin-top: 10px;
+}
+.cm-value-margin{
+    margin-left: 5px;
+}
+.fancyinput{
+    padding: 7px;
+}
+#createmessage{
+    margin-top: 20px;
+    display: none;
+}
+.crossbutton{
+    float: right;
+}
+.iconbuttons{
+    font-size: 35px;
+    font-weight: bolder;
+    cursor: pointer;
+    padding: 0px !important;
 }

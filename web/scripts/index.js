@@ -327,16 +327,18 @@ function changeUpdateButton(elem){
 
 function displayError(e, action){
     var messageSpan = document.getElementById(action+"message-span")    
+    var messageDiv = document.getElementById(action+"message")    
     messageSpan.innerHTML="Error : "+ e;
     messageSpan.style.color = "red"
     messageSpan.style.fontWeight="bold"
-    setTimeout(function(){messageSpan.innerHTML=""}, 1500)
+    messageDiv.style.display="block"
 }
 
 function displaySuccess(message, action){
     var messageSpan = document.getElementById(action+"message-span")    
+    var messageDiv = document.getElementById(action+"message")
     messageSpan.innerHTML="Success : "+ message;
     messageSpan.style.color = "green"
     messageSpan.style.fontWeight="bold"
-    setTimeout(function(){messageSpan.innerHTML=""}, 1500)
+    messageDiv.style.display = "block"
 }
