@@ -25,9 +25,9 @@ function hideMessage(e){
 }
 
 /*
-When we switch over the actions for update and delete we need 
-the namespace and the name of the resource, but in the case of 
-create we dont need the name drop down, so we will just have to 
+When we switch over the actions for update and delete we need
+the namespace and the name of the resource, but in the case of
+create we dont need the name drop down, so we will just have to
 display the the namespace dropdowon.
 This function hides the name drop down if the action is Create
 */
@@ -106,24 +106,30 @@ function removeKeyValue(e){
 }
 
 document.getElementById("create-res-button").addEventListener("click", function(){
-    
+
     ns = document.getElementById("namespaces").value
     name = document.getElementById("res-name").value
     let cmFrom
     fromButtons = document.getElementsByName("cm-from")
     for (let i = 0; i < fromButtons.length; i++) {
-        if (fromButtons[i].getAttribute("checked")==""){
+        if (fromButtons[i].checked){
             cmFrom = fromButtons[i].id
         }
     }
-    
+
     let cmdata = {}
-    keyElems = document.getElementsByClassName("cm-key")
-    valueElems = document.getElementsByClassName("cm-value")
-    for (let i = 0; i < keyElems.length; i++) { 
-        cmdata[keyElems[i].value]= valueElems[i].value
+    if (cmFrom =="from-literal"){
+        keyElems = document.getElementsByClassName("cm-key")
+        valueElems = document.getElementsByClassName("cm-value")
+        for (let i = 0; i < keyElems.length; i++) {
+            cmdata[keyElems[i].value]= valueElems[i].value
+        }
+    } else if (cmFrom == "from-file"){
+        fileContent = document.getElementById("creatres-ta").value
+        fileName = document.getElementById("file-name").value
+        cmdata[fileName] = fileContent
     }
-    
+
     cm = {
         metadata:{
             name: name,
@@ -151,12 +157,16 @@ function createConfigMap(cm){
 function processCreateResponse(){
     if (createCMXMLObj.status == 200 && createCMXMLObj.readyState == 4){
         response = JSON.parse(createCMXMLObj.responseText)
-        console.log(response == null)
-        console.log(response == "null")
         if (response == null){
             displaySuccess("Resource was created", actionSelected)
         } else{
             displayError("There was an error:"+ JSON.stringify(response), actionSelected)
         }
     }
+}
+
+function createResFrom(elem){
+    document.getElementById("cm-content-from-file").classList.toggle("displaynone")
+    document.getElementById("cm-content-from-literal").classList.toggle("displaynone")
+    document.getElementById("creatres-ta").innerHTML=""
 }

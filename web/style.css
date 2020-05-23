@@ -17,7 +17,7 @@ header span{
     height: 1px;
     background-color: rgb(0, 51, 153);
 }
-#name-select{  
+#name-select{
     text-align: center;
     width: 50%;
 }
@@ -29,7 +29,7 @@ header span{
 
 #configmap, #del-configmap{
     text-align: center;
-    width: 50% !important; 
+    width: 50% !important;
     box-sizing: border-box;
 }
 #secret, #del-secret{
@@ -183,7 +183,10 @@ a{
     padding: 10px;
     border: none;
 }
-#cm-content-from-file{
+/* #cm-content-from-file{
+    display: none;
+} */
+.displaynone{
     display: none;
 }
 .plus-button{
@@ -213,4 +216,11 @@ a{
     font-weight: bolder;
     cursor: pointer;
     padding: 0px !important;
+}
+.createres-bg{
+    background-color: #f0f0f0;
+    padding: 10px;
+}
+#creatres-ta{
+    width: 90%;
 }

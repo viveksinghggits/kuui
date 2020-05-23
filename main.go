@@ -50,6 +50,7 @@ func main() {
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", getSecretData).Methods("GET")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", updateSecret).Methods("PUT")
 	router.HandleFunc(secretBaseURL+"/{secretns}/{secretname}", deleteSecret).Methods("DELETE")
+	router.HandleFunc(secretBaseURL, createSecret).Methods("POST")
 
 	hostPort := ":8000"
 	// allow CORS
@@ -61,6 +62,10 @@ func main() {
 	if err != nil {
 		klog.Fatalf("Error %s starting the service.", err.Error())
 	}
+
+}
+
+func createSecret(w http.ResponseWriter, r *http.Request) {
 
 }
 

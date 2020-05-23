@@ -40,7 +40,7 @@
                         <div style="text-align: left; padding-bottom: 10px;">
                             Please select ConfigMap or Secret:
                         </div>
-                        
+
                         <div id="configmap" class="fl selectboxes">
                             <button class="fancybutton resourcebutton selected" id="cmbutton">ConfigMap</button>
                         </div>
@@ -63,7 +63,7 @@
                         <div id="res-name-div" style="display: none;">
                             <input type="text" id="res-name" class="fancyinput" placeholder="Enter resource  name">
                         </div>
-                    </div> 
+                    </div>
                     <hr style="clear: both;" class="invisiblehr">
                 </div>
                 <div id="resourcebody-update" class="resourcebody">
@@ -108,24 +108,30 @@
                 <div id="resourcebody-create" class="resourcebody">
                     <div id="cm-div">
                         <div id="createcm-from">
-                            <input id="from-literal" type="radio" value="from-file" name="cm-from" checked> From literal
-                            <input id="from-file" type="radio" value="from-file" name="cm-from"> From file
+                            <input id="from-literal" type="radio" value="from-file" name="cm-from" checked onclick="createResFrom(this)"> From literal
+                            <input id="from-file" type="radio" value="from-file" name="cm-from" onclick="createResFrom(this)"> From file
                         </div>
-                        <div id="cm-content-from-file" class="cm-create-content">
-                            <div>
-                                <input type="text" id="file-name">
-                            </div>
-                            <div>
-                                <textarea>
-                                </textarea>
+                        <br>
+                        <div id="cm-content-from-file" class="cm-create-content displaynone">
+                            <div id="from-file" class="createres-bg">
+                                <div>
+                                    File name: <input type="text" id="file-name" class="fancyinput">
+                                </div>
+                                <br>
+                                <div>
+                                    <textarea id="creatres-ta" style="width: 90%;" rows="15" >
+                                    </textarea>
+                                </div>
                             </div>
                         </div>
                         <div id="cm-content-from-literal" class="cm-create-content">
-                            <div id="cm-key-value">
-                                <div class="key-value">
-                                    <input type="text" class="cm-key fancyinput" placeholder="key">
-                                    <input type="text" class="cm-value fancyinput" placeholder="value">
-                                    <input type="button" value="+" class="plus-button iconbuttons" id="add-cm-keys" tabindex="-1">
+                            <div id="from-literal" class="createres-bg">
+                                <div id="cm-key-value">
+                                    <div class="key-value">
+                                        <input type="text" class="cm-key fancyinput" placeholder="key">
+                                        <input type="text" class="cm-value fancyinput" placeholder="value">
+                                        <input type="button" value="+" class="plus-button iconbuttons" id="add-cm-keys" tabindex="-1">
+                                    </div>
                                 </div>
                             </div>
                         </div>
