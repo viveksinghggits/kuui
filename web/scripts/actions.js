@@ -109,39 +109,77 @@ document.getElementById("create-res-button").addEventListener("click", function(
 
     ns = document.getElementById("namespaces").value
     name = document.getElementById("res-name").value
-    let cmFrom
+    let resFrom
     fromButtons = document.getElementsByName("cm-from")
     for (let i = 0; i < fromButtons.length; i++) {
         if (fromButtons[i].checked){
-            cmFrom = fromButtons[i].id
+            resFrom = fromButtons[i].id
         }
     }
 
-    let cmdata = {}
-    if (cmFrom =="from-literal"){
+    let resdata = {}
+    if (resFrom =="from-literal"){
         keyElems = document.getElementsByClassName("cm-key")
         valueElems = document.getElementsByClassName("cm-value")
         for (let i = 0; i < keyElems.length; i++) {
-            cmdata[keyElems[i].value]= valueElems[i].value
+            resdata[keyElems[i].value]= valueElems[i].value
         }
-    } else if (cmFrom == "from-file"){
+    } else if (resFrom == "from-file"){
         fileContent = document.getElementById("creatres-ta").value
         fileName = document.getElementById("file-name").value
-        cmdata[fileName] = fileContent
+        resdata[fileName] = fileContent
     }
+    if (cmOrSecret == "ConfigMap"){
+        cm = {
+            metadata:{
+                name: name,
+                namespace: ns
+            },
+            data: resdata,
+            kind: "ConfigMap",
+            apiVersion: "v1"
+        }
 
-    cm = {
-        metadata:{
-            name: name,
-            namespace: ns
-        },
-        data: cmdata,
-        kind: "ConfigMap",
-        apiVersion: "v1"
+        createConfigMap(cm)
+
+    } else if (cmOrSecret == "Secret"){
+
+        secret  = {
+            apiVersion: "v1",
+            kind: "Secret",
+            stringData: resdata,
+            metadata: {
+                name: name,
+                namespace: ns
+            }
+        }
+
+        createSecret(secret)
+
     }
-
-    createConfigMap(cm)
 })
+
+createSecXMLObj = createXMLHttpRequestObject()
+function createSecret(sec){
+    if (createSecXMLObj != null){
+        createSecXMLObj.open("POST", SECRET_BASE_URL.substring(0,  SECRET_BASE_URL.length-1), true)
+        createSecXMLObj.onreadystatechange = processCreateSecRes
+        createSecXMLObj.send(JSON.stringify(sec))
+    } else{
+        console.log("Object was not created to create secret")
+    }
+}
+
+function processCreateSecRes(){
+    if (createSecXMLObj.status == 200 && createSecXMLObj.readyState == 4){
+        secResponse = JSON.parse(createSecXMLObj.responseText)
+        if (secResponse == null){
+            displaySuccess("Resource was created", actionSelected)
+        } else{
+            displayError("There was an error:"+ JSON.stringify(secResponse), actionSelected)
+        }
+    }
+}
 
 createCMXMLObj = createXMLHttpRequestObject()
 function createConfigMap(cm){

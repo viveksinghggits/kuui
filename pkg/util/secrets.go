@@ -37,3 +37,8 @@ func UpdateSecret(kubeclient *kubernetes.Clientset, secretNS, secretName string,
 func DeleteSecret(kubeclient *kubernetes.Clientset, secretNS, secretName string) error {
 	return kubeclient.CoreV1().Secrets(secretNS).Delete(secretName, &metav1.DeleteOptions{})
 }
+
+func CreateSecret(kubeclient *kubernetes.Clientset, secret corev1.Secret) error {
+	_, err := kubeclient.CoreV1().Secrets(secret.Namespace).Create(&secret)
+	return err
+}

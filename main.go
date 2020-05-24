@@ -66,7 +66,13 @@ func main() {
 }
 
 func createSecret(w http.ResponseWriter, r *http.Request) {
+	var secret corev1.Secret
+	decoder := json.NewDecoder(r.Body)
+	decoder.Decode(&secret)
 
+	res := util.CreateSecret(kubeclient, secret)
+
+	json.NewEncoder(w).Encode(res)
 }
 
 func createConfigMap(w http.ResponseWriter, r *http.Request) {
