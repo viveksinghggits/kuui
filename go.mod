@@ -7,9 +7,9 @@ require (
 	github.com/gorilla/handlers v1.4.2
 	github.com/gorilla/mux v1.7.3
 	github.com/imdario/mergo v0.3.8 // indirect
-	golang.org/x/net v0.0.0-20191109021931-daa7c04131f5 // indirect
 	golang.org/x/time v0.0.0-20191024005414-555d28b269f0 // indirect
-	gopkg.in/check.v1 v1.0.0-20180628173108-788fd7840127
+	golang.org/x/tools/gopls v0.4.1 // indirect
+	gopkg.in/check.v1 v1.0.0-20190902080502-41f04d3bba15
 	k8s.io/api v0.17.4
 	k8s.io/apimachinery v0.17.4
 	k8s.io/apiserver v0.17.4 // indirect

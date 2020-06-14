@@ -1,5 +1,5 @@
 # KuUI (Kubernetes UI)
-The main purpose of this application is to have a simple UI that can be used to manage the configmaps/secrets of your Kubernetes cluster. 
+The main purpose of this application is to have a simple UI that can be used to manage the configmaps/secrets of your Kubernetes cluster.
 
 # Installation
 
@@ -13,8 +13,8 @@ To build the project from source, please clone it on your machine using below co
 git clone https://github.com/viveksinghggits/kuui.git
 ```
 
-and you can build the project using the command `go mod -o kuui`. Optionally you can move the created binary
-into your path so that you can use this from whereever you want.
+and you can build the project using the command `go build -o kuui`. Optionally you can move the created binary
+into your path so that you can use this from where ever you want.
 
 ### Running it
 
@@ -25,16 +25,15 @@ To run the project you just have to execute the `kuui` binary by providing it th
 ```
 
 To access the UI you will just have to open the index.html file in your favourite web browser  and you will be asked to enter the endpoint of backend service for the first time. After that you can
-just acccess the web UI without any issues. 
+just acccess the web UI without any issues.
 
-![Demo](docs/cm-secret-final.gif)
+![Demo](docs/kuui_demo.gif)
 
 
 ## RoadMap
 
-* Support for creation and deletion of the CM and Secret resource
-* Get the web service deployed on Kubernetes
+* Get the service deployed on Kubernetes
 
 **Note**
-I recently started working on this and would love to hear your inputs/feedback, please feel free to raise an issue 
+I recently started working on this and would love to hear your inputs/feedback, please feel free to raise an issue
 or open a PR.
