@@ -7,6 +7,7 @@ import (
 	"k8s.io/klog"
 )
 
+// ListConfigMaps returns list of ConfigMap from all the namespaces
 func ListConfigMaps(kubeclient *kubernetes.Clientset) []corev1.ConfigMap {
 
 	configMapList, err := kubeclient.CoreV1().ConfigMaps("").List(metav1.ListOptions{})
