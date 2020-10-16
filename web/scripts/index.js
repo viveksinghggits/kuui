@@ -19,12 +19,21 @@ for(var i=0; i<res.length; i++){
             document.getElementById(id).classList.add("selected")
             document.getElementById("cmbutton").classList.remove("selected")
         }
-        changeUpdateButton(e.target)    
+        changeUpdateButton(e.target)
     })
 }
 
+
+
+
+
+
+
+
+
+
 function createXMLHttpRequestObject(){
-	
+
 	if(window.XMLHttpRequest){
 		xmlHTTPRequest = new XMLHttpRequest();
 	}
@@ -51,7 +60,7 @@ function updateBaseURL(){
     baseurl  = document.getElementById("baseurl").value
     let reg = new RegExp('((http[s]?):\/)\/[a-z]*[A-Z]*:\d*', 'g')
     res = baseurl.match(reg)
-    
+
     if (res == null){
         document.getElementById("invalidurl").innerHTML="Endpoint doesnt seem to be valid."
     }
@@ -59,14 +68,14 @@ function updateBaseURL(){
         ls.setItem("BASE_URL", baseurl)
         document.location.reload()
     }
-    
+
 }
 
 var xmlObj = createXMLHttpRequestObject()
 document.addEventListener("DOMContentLoaded", function(){
     initBaseURLBox()
     document.getElementById("updateurlbutton").addEventListener("click", updateBaseURL)
-    
+
     if (xmlObj != null){
         try{
             xmlObj.open("GET", NS_BASE_RUL, true);
@@ -86,7 +95,7 @@ document.addEventListener("DOMContentLoaded", function(){
 // it displayes all the namespaces int he first drop down
 function processResponse(){
     if ((xmlObj.status ==200) && (xmlObj.readyState == 4)){
-        
+
         allNamespaces  = JSON.parse(xmlObj.responseText)
         const nsSelect = document.getElementById("namespaces")
         for (var i=0; i<allNamespaces.length; i++){
@@ -109,9 +118,9 @@ document.getElementById("namespaces").addEventListener("change", function (e){
 
     // e has the event
     ns = document.getElementById("namespaces").value
-    // get all configmaps for this namespcaes 
+    // get all configmaps for this namespcaes
     displayConfigMapsOfNs(ns)
-    
+
 })
 
 // gets all resources cm or secret from a namespace
@@ -150,7 +159,7 @@ document.getElementById("cmnames").addEventListener("change", function (){
     if (actionSelected == "update"){
         if (cmname != "Select Name"){
             if (xmlObj1!=null){
-                
+
                 if (cmOrSecret=="ConfigMap"){
                     xmlObj1.open("GET", CM_BASE_URL+cmnamespace+"/"+cmname, true)
                 }
@@ -172,18 +181,18 @@ document.getElementById("cmnames").addEventListener("change", function (){
 function processCMResponse(){
     if ((xmlObj1.status == 200) && (xmlObj1.readyState == 4)){
         configmaps = JSON.parse(xmlObj1.responseText)
-        
+
         cmData = document.getElementById("cm-data")
-        
-        // if we are getting secret we will have to 
-        // decode the value of data and then display 
+
+        // if we are getting secret we will have to
+        // decode the value of data and then display
         // in the UI
         if (cmOrSecret == "Secret"){
             Object.keys(configmaps.data).forEach(function(key){
                 configmaps.data[key] = window.atob(configmaps.data[key])
             })
         }
-        
+
         cmData.value = JSON.stringify(configmaps.data, null, 4)
     }
 }
@@ -216,7 +225,7 @@ function deleteResource(resName, resNS){
     } else{
         console.log("there was an issue creating XML object to delete the resource.")
     }
-    
+
 }
 
 function processDelResourceResponse(){
@@ -233,9 +242,9 @@ document.getElementById("update-res-button").addEventListener("click", function 
     cmName = document.getElementById("cmnames").value
     cmNamespace = document.getElementById("namespaces").value
 
-    allConfigMaps.forEach(function (element){    
+    allConfigMaps.forEach(function (element){
         if ((cmName == element.metadata.name) && (cmNamespace == element.metadata.namespace)){
-            
+
             if (updatedData != JSON.stringify(element.data)){
                 updateConfigMap(cmName, cmNamespace, element, updatedData)
             }
@@ -244,7 +253,7 @@ document.getElementById("update-res-button").addEventListener("click", function 
             }
         }
     })
-    
+
 })
 
 var xmlObjUpdate = createXMLHttpRequestObject()
@@ -261,7 +270,7 @@ function updateConfigMap(name, namespace, configmap, updatedData){
             configmap.data[key] = window.btoa(configmap.data[key])
         })
     }
-    
+
     if (xmlObjUpdate != null){
         if (cmOrSecret == "ConfigMap"){
             xmlObjUpdate.open("PUT", CM_BASE_URL+namespace+"/"+name, true)
@@ -269,7 +278,7 @@ function updateConfigMap(name, namespace, configmap, updatedData){
         else if (cmOrSecret =="Secret"){
             xmlObjUpdate.open("PUT", SECRET_BASE_URL+namespace+"/"+name, true)
         }
-            
+
         xmlObjUpdate.onreadystatechange = processUpdateResponse
         xmlObjUpdate.send(JSON.stringify(configmap))
     }
@@ -287,11 +296,11 @@ function processUpdateResponse(){
             messageSpan.innerHTML="Secret was updated successfully."
         }
     }
-    
+
     setTimeout(function(){messageSpan.innerHTML=""}, 1500)
 }
 
-// reset will reset the select boxes once we change the 
+// reset will reset the select boxes once we change the
 function reset(){
     // delete the resource names from resource select list
     cmNameSelect = document.getElementById("cmnames");
@@ -308,7 +317,7 @@ function reset(){
     document.getElementById("namespaces").value="Select Namespace"
     document.getElementById("delete-res-conf").value =""
     document.getElementById("resourcebody-delete-confirm").style.display="none"
-    
+
     // select the configmaps by default
     document.getElementById("cmbutton").classList.add("selected")
     document.getElementById("secretbutton").classList.remove("selected")
@@ -326,8 +335,8 @@ function changeUpdateButton(elem){
 }
 
 function displayError(e, action){
-    var messageSpan = document.getElementById(action+"message-span")    
-    var messageDiv = document.getElementById(action+"message")    
+    var messageSpan = document.getElementById(action+"message-span")
+    var messageDiv = document.getElementById(action+"message")
     messageSpan.innerHTML="Error : "+ e;
     messageSpan.style.color = "red"
     messageSpan.style.fontWeight="bold"
@@ -335,7 +344,7 @@ function displayError(e, action){
 }
 
 function displaySuccess(message, action){
-    var messageSpan = document.getElementById(action+"message-span")    
+    var messageSpan = document.getElementById(action+"message-span")
     var messageDiv = document.getElementById(action+"message")
     messageSpan.innerHTML="Success : "+ message;
     messageSpan.style.color = "green"
